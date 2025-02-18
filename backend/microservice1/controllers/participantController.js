@@ -21,7 +21,13 @@ const registerParticipant = async (req, res) => {
     role,
   });
   await participant.save();
+  const token = jwt.sign(
+    { userId: participant._id, role: participant.role },
+    JWT_SECRET,
+    { expiresIn: '1h' }
+  );
   res.status(201).json({
+    token,
     message: 'Participant registered successfully',
     participantId: participant._id,
   });
